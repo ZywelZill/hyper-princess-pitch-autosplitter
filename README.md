@@ -1,1 +1,1 @@
-# HyperPrincessPitchAutoSplitter
+# hyper-princess-pitch-autosplitter

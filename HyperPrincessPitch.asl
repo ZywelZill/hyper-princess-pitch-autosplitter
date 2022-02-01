@@ -2,23 +2,20 @@
 // HyperPrincessPitch.asl
 
 state ("pitch gm7") {
+	// Level Internal Number
 	int level : "pitch gm7.exe", 0x1AF2F8;
 
+	// First Split Checker (Only used in "start")
 	int firstSplit : "jbfmod.dll", 0x0000E884, 0x4, 0x4, 0x4, 0x4B4; // 102 = non-start, rng = start game
+
+	// Last Split Checker (Only used after defeating Mecha-Santa)
 	int lastSplit : "jbfmod.dll", 0x0000E87C, 0x4, 0x0, 0x0, 0x0, 0x0, 0x4, 0x4B4; // 102 = non-finish, rng = finish game
+
+	// Split Checker (Used in every level transition)
 	int levelSplit : "pitch gm7.exe", 0x001878B0, 0x244, 0x90, 0x0, 0xF4, 0x88, 0x7C; // 2 normal, 3 transition
 	// int levelSplit2 : "pitch gm7.exe", 0x001878B0, 0x248, 0x90, 0x0, 0xF4, 0x88, 0x7C;
 	// int levelSplit3 : "pitch gm7.exe", 0x001878B0, 0x244, 0x90, 0x0, 0xF8, 0x0, 0x88, 0x7C;
 	// int levelSplit4 : "pitch gm7.exe", 0x001878B0, 0x248, 0x90, 0x0, 0xF8, 0x0, 0x88, 0x7C;
-
-	// Not in use anymore
-	// int gamestart : "fmod.dll", 0x00035364, 0x200, 0x88, 0x88, 0x0, 0x40, 0x1C, 0x9D4; // 0 normal 1 start 0 back
-	// int hpp3_1 : "pitch gm7.exe", 0x001198B8, 0x78, 0x64, 0x30C, 0xAD8, 0x5F0, 0x660, 0x6C; // 1 normal 2 start 1 back
-	// int hpp3_2 : "D3DX8.dll", 0x0005C128, 0x8, 0xBC, 0x8, 0xA24, 0x5F0, 0x660, 0x6C; // 1 normal 2 start 1 back
-	// int gamestart2 : "pitch gm7.exe", 0x001198B8, 0x78, 0x64, 0x30C, 0xAD8, 0x5F0, 0x660, 0x6C; // 1 normal 2 start 2 back
-	// int test1 : "fmod.dll", 0x47A74;
-	// int test2 : "pitch gm7.exe", 0x001AF49C, 0x354, 0x4, 0x240, 0x4C, 0x68, 0x1D0; // 0 main 1 start (activates when returning from demo screens)
-	// int levelSplitOld : "pitch gm7.exe", 0x1AF314;
 }
 
 startup {
@@ -37,18 +34,11 @@ start {
 }
 
 split {
-	// Splits when boss starts "exploding" or "disappear"
+	// Splits happen when boss "starts exploding" or "disappear"
 	// Last Split happens when screen goes white
 	if (current.levelSplit == 3 && old.levelSplit == 2 && current.level != 6) {
 		return true;
 	} else if (current.lastSplit != 102 && old.lastSplit == 102 && current.level == 6) {
 		return true;
 	}
-}
-
-reset {
-	// if (current.firstSplit == 121)
-	// {
-	// 	return true;
-	// }
 }
